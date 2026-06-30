@@ -40,7 +40,9 @@ Verify a scene visually (rendering OK ≠ looks right): render it, then eyeball 
    (gif + Korean caption) into the notebook. Its `INSERTS` list anchors each visual to a **unique
    section-header substring** (not a fixed cell index), resolved at runtime, so insertions survive the
    notebook gaining/losing cells between deploys; cells are inserted highest-index-first. An anchor that
-   matches zero or multiple cells fails loudly. `render.sh` runs it automatically at the end of every render.
+   matches zero or multiple cells fails loudly. It also prepends the header image
+   `week1/assets/thumbnail.png` as cell 0 (same relative/raw-URL split as gifs; hosted, not base64).
+   `render.sh` runs it automatically at the end of every render.
 
 ### Notebook versions (project rule: always keep BOTH in sync)
 

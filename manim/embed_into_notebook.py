@@ -12,6 +12,7 @@ WEEK1 = os.path.join(os.path.dirname(__file__), "..", "week1")
 SRC = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체.원본.ipynb")
 DST = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체.ipynb")          # committed: relative paths
 DST_DEPLOY = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체_배포.ipynb")  # gitignored: raw URL, for Drive/Colab
+THUMBNAIL = "thumbnail.png"   # top-of-notebook image in week1/assets/, hosted like the gifs
 
 # The notebook is hosted on Google Drive/Colab where relative paths don't resolve,
 # so gifs are referenced by absolute GitHub raw URL. The gifs must be pushed to this
@@ -62,6 +63,11 @@ def md_cell(title, gif, caption, base):
     return {"cell_type": "markdown", "metadata": {}, "source": src}
 
 
+def thumb_cell(base):
+    return {"cell_type": "markdown", "metadata": {},
+            "source": [f"![Practical AI 101]({base}/{THUMBNAIL})\n"]}
+
+
 def find_after(cells, anchor):
     """Index of the single markdown cell containing `anchor`. Fails loudly if not unique."""
     hits = [i for i, c in enumerate(cells)
@@ -80,6 +86,8 @@ def build(base, dst):
                 for anchor, title, gif, caption in INSERTS]
     for idx, title, gif, caption in sorted(resolved, key=lambda r: r[0], reverse=True):
         cells.insert(idx + 1, md_cell(title, gif, caption, base))
+    if os.path.exists(os.path.join(ASSETS, THUMBNAIL)):   # prepend last so anchor inserts are unaffected
+        cells.insert(0, thumb_cell(base))
     with open(dst, "w", encoding="utf-8") as f:
         json.dump(nb, f, ensure_ascii=False, indent=1)
     print(f"wrote {os.path.basename(dst)}  (base: {base}, cells: {len(cells)})")

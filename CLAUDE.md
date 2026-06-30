@@ -37,9 +37,10 @@ Verify a scene visually (rendering OK ≠ looks right): render it, then eyeball 
    GUI window if run bare, so render.sh renders mp4 with `-w` then palette-converts to gif via ffmpeg.
    Outputs land in `manim/videos/`. The `SCENES` array is the source of truth for what gets rendered.
 3. **`manim/embed_into_notebook.py`** — copies gifs into `week1/assets/` and inserts a markdown cell
-   (gif + Korean caption) into the notebook. Its `INSERTS` dict maps **original cell index ->
-   (title, gif_basename, caption)**; cells are inserted highest-index-first so earlier indices stay valid.
-   `render.sh` runs it automatically at the end of every render.
+   (gif + Korean caption) into the notebook. Its `INSERTS` list anchors each visual to a **unique
+   section-header substring** (not a fixed cell index), resolved at runtime, so insertions survive the
+   notebook gaining/losing cells between deploys; cells are inserted highest-index-first. An anchor that
+   matches zero or multiple cells fails loudly. `render.sh` runs it automatically at the end of every render.
 
 ### Notebook versions (project rule: always keep BOTH in sync)
 
@@ -56,6 +57,11 @@ Every embed run regenerates **two** notebooks from the one pristine source — n
 `embed_into_notebook.py` reads `.원본` and writes both, so re-running is safe (never double-inserts).
 Because the Drive export loads gifs from GitHub raw, **`week1/assets/` must be committed and pushed**
 for it to display on Colab — re-render, then push the updated gifs. To repoint the URL, edit `GIF_BASE_URL`.
+
+**Re-syncing from a new course deploy:** when the team ships an updated notebook, overwrite
+`…원본.ipynb` with it and re-run the embed (or `./render.sh`). The 10 visuals re-place correctly by
+header anchor even though cell indices shift. If a section *header was renamed*, update that anchor in
+`INSERTS`; the run aborts with the offending anchor if it no longer matches exactly one cell.
 
 ## Adding / editing a scene
 

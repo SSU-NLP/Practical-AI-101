@@ -47,3 +47,7 @@ done
 
 echo "=== done. outputs in $(pwd)/videos/ ==="
 ls -1 videos/*.mp4 videos/*.gif 2>/dev/null || true
+
+# Project rule: always regenerate BOTH notebook versions (deliverable + local preview).
+echo "=== embedding into notebooks ==="
+python embed_into_notebook.py

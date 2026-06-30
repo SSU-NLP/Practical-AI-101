@@ -21,10 +21,10 @@ Toolchain: `manimgl` v1.7.2 (3b1b, NOT Community Edition), system `ffmpeg`, and 
 
 ```bash
 cd manim
-./render.sh                 # render every scene -> videos/<Scene>.mp4 + .gif
-./render.sh Backprop        # render only scenes whose name contains the filter
+./render.sh                 # render every scene -> mp4+gif, then auto-embed BOTH notebooks
+./render.sh Backprop        # render only scenes matching the filter (still re-embeds at the end)
 Q=-l ./render.sh            # quality: -l fast / -m default(720p) / -hq 1080p
-python embed_into_notebook.py   # copy gifs to week1/assets/ + insert cells into the notebook
+python embed_into_notebook.py   # (re)generate BOTH notebook versions without rendering
 ```
 
 Verify a scene visually (rendering OK ≠ looks right): render it, then eyeball a frame —
@@ -39,16 +39,23 @@ Verify a scene visually (rendering OK ≠ looks right): render it, then eyeball 
 3. **`manim/embed_into_notebook.py`** — copies gifs into `week1/assets/` and inserts a markdown cell
    (gif + Korean caption) into the notebook. Its `INSERTS` dict maps **original cell index ->
    (title, gif_basename, caption)**; cells are inserted highest-index-first so earlier indices stay valid.
+   `render.sh` runs it automatically at the end of every render.
 
-### Notebook source-of-truth (important)
+### Notebook versions (project rule: always keep BOTH in sync)
 
-- `week1/딥러닝기초_PyTorch_전체.원본.ipynb` — **pristine source**, no visuals. Never embed into this.
-- `week1/딥러닝기초_PyTorch_전체.ipynb` — **the deliverable**, with visuals embedded.
+Every embed run regenerates **two** notebooks from the one pristine source — never edit either by hand:
 
-`embed_into_notebook.py` always reads `.원본` (SRC) and writes the main file (DST), so re-running it
-is safe and never double-inserts. gif paths in the notebook are relative (`assets/X.gif`), resolving
-when opened from `week1/`. (This is a Colab notebook — relative gifs won't render on Colab without
-also uploading `assets/`, or switching to base64-embedded gifs.)
+- `week1/딥러닝기초_PyTorch_전체.원본.ipynb` — **pristine source**, no visuals. The only notebook you edit
+  (or re-export from the course); both versions are built from it. Committed.
+- `week1/딥러닝기초_PyTorch_전체.ipynb` — **committed canonical** repo copy. gifs use the relative
+  `assets/` path, so they render both in GitHub's notebook preview and in local VS Code/Jupyter.
+- `week1/딥러닝기초_PyTorch_전체_배포.ipynb` — **Drive/Colab export, gitignored**. gifs use the absolute
+  GitHub raw URL (`GIF_BASE_URL`, `SSU-NLP/Practical-AI-101` `main` `week1/assets/`) — the only form that
+  resolves on Colab. Upload this one to Google Drive manually; it is not committed.
+
+`embed_into_notebook.py` reads `.원본` and writes both, so re-running is safe (never double-inserts).
+Because the Drive export loads gifs from GitHub raw, **`week1/assets/` must be committed and pushed**
+for it to display on Colab — re-render, then push the updated gifs. To repoint the URL, edit `GIF_BASE_URL`.
 
 ## Adding / editing a scene
 

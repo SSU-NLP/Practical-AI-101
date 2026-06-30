@@ -1,6 +1,8 @@
-"""Insert manim gif visualizations into the week-1 notebook (non-destructive).
-Reads the original .ipynb, inserts a markdown cell after each target cell,
-writes a new *_시각자료.ipynb next to it. Gifs are referenced as assets/<name>.gif.
+"""Insert manim gif visualizations into the week-1 notebook.
+Reads the pristine .원본.ipynb and ALWAYS writes BOTH versions (project rule):
+  - 딥러닝기초_PyTorch_전체.ipynb       committed: gifs via relative assets/ (renders on GitHub & local VS Code)
+  - 딥러닝기초_PyTorch_전체_배포.ipynb   gitignored: gifs via GitHub raw URL -> upload to Google Drive/Colab
+render.sh calls this automatically after rendering, so both stay in sync.
 """
 import json, os, shutil
 
@@ -8,7 +10,13 @@ WEEK1 = os.path.join(os.path.dirname(__file__), "..", "week1")
 # SRC is the pristine source (no visuals); DST is the actual practice notebook.
 # Keeping them separate makes this script safely re-runnable (no double-insert).
 SRC = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체.원본.ipynb")
-DST = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체.ipynb")
+DST = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체.ipynb")          # committed: relative paths
+DST_DEPLOY = os.path.join(WEEK1, "딥러닝기초_PyTorch_전체_배포.ipynb")  # gitignored: raw URL, for Drive/Colab
+
+# The notebook is hosted on Google Drive/Colab where relative paths don't resolve,
+# so gifs are referenced by absolute GitHub raw URL. The gifs must be pushed to this
+# repo/branch/path for the URLs to load. Set to "assets" for local-only (relative) use.
+GIF_BASE_URL = "https://raw.githubusercontent.com/SSU-NLP/Practical-AI-101/refs/heads/main/week1/assets"
 ASSETS = os.path.join(WEEK1, "assets")
 VIDEOS = os.path.join(os.path.dirname(__file__), "videos")
 
@@ -37,37 +45,46 @@ INSERTS = {
 }
 
 
-def md_cell(title, gif, caption):
+def md_cell(title, gif, caption, base):
+    note = ("gif는 같은 저장소의 assets/ 에서 로드됩니다 (GitHub·로컬용)" if base == "assets"
+            else "gif는 GitHub raw URL에서 로드됩니다 (Drive/Colab 배포용)")
     src = [
         f"### 🎬 시각 자료: {title}\n",
         "\n",
         f"{caption}\n",
         "\n",
-        f"![{gif}](assets/{gif}.gif)\n",
+        f"![{gif}]({base}/{gif}.gif)\n",
         "\n",
-        f"> 고화질 영상: [`manim/videos/{gif}.mp4`](../manim/videos/{gif}.mp4) · ManimGL로 제작\n",
+        f"> ManimGL로 제작 · {note}\n",
     ]
     return {"cell_type": "markdown", "metadata": {}, "source": src}
+
+
+def build(base, dst):
+    with open(SRC, encoding="utf-8") as f:
+        nb = json.load(f)
+    cells = nb["cells"]
+    # insert from highest index downward so earlier indices stay valid
+    for after in sorted(INSERTS, reverse=True):
+        title, gif, caption = INSERTS[after]
+        cells.insert(after + 1, md_cell(title, gif, caption, base))
+    with open(dst, "w", encoding="utf-8") as f:
+        json.dump(nb, f, ensure_ascii=False, indent=1)
+    print(f"wrote {os.path.basename(dst)}  (base: {base}, cells: {len(cells)})")
 
 
 def main():
     os.makedirs(ASSETS, exist_ok=True)
     for _, gif, _ in INSERTS.values():
-        shutil.copy(os.path.join(VIDEOS, f"{gif}.gif"), os.path.join(ASSETS, f"{gif}.gif"))
+        src_gif = os.path.join(VIDEOS, f"{gif}.gif")
+        if os.path.exists(src_gif):
+            shutil.copy(src_gif, os.path.join(ASSETS, f"{gif}.gif"))
+        else:
+            print(f"  [skip] not rendered yet: {gif}.gif")
 
-    with open(SRC, encoding="utf-8") as f:
-        nb = json.load(f)
-    cells = nb["cells"]
-
-    # insert from highest index downward so earlier indices stay valid
-    for after in sorted(INSERTS, reverse=True):
-        title, gif, caption = INSERTS[after]
-        cells.insert(after + 1, md_cell(title, gif, caption))
-
-    with open(DST, "w", encoding="utf-8") as f:
-        json.dump(nb, f, ensure_ascii=False, indent=1)
-    print("wrote", DST)
-    print("cells:", len(cells), "(+%d)" % len(INSERTS))
+    # Project rule: always produce BOTH versions so they never drift apart.
+    build("assets", DST)              # committed: relative paths (renders on GitHub & local VS Code)
+    build(GIF_BASE_URL, DST_DEPLOY)   # gitignored: GitHub raw URL, upload to Google Drive/Colab
 
 
 if __name__ == "__main__":

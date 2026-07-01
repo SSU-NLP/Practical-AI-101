@@ -26,7 +26,10 @@ SCENES=(
   "scenes/gradient_descent.py:GradientDescent"
   "scenes/training_loop.py:TrainingLoop"
   "scenes/sentiment_overview.py:SentimentOverview"
+  "scenes/mean_pooling.py:MeanPooling"
+  "scenes/embedding_lookup.py:EmbeddingLookup"
   "scenes/wordwindow_overview.py:WordWindowOverview"
+  "scenes/embedding_training.py:EmbeddingTraining"
 )
 
 to_gif() {  # mp4 -> gif via two-pass palette (crisp text, small size)

@@ -30,7 +30,7 @@ Q=-l ./render.sh                 # 빠른 미리보기 품질 (-l 저화질 / -m
 출력: `videos/<Scene>.mp4`, `videos/<Scene>.gif`.
 필요 도구: `ffmpeg`, LaTeX(MacTeX) — 둘 다 시스템에 설치돼 있어야 함.
 
-## 3. 씬 (10개, 고차원 연산 시각화)
+## 3. 씬 (13개, 고차원 연산 시각화)
 
 | 파일 | Scene | 개념 | 노트북 위치 |
 |---|---|---|---|
@@ -43,7 +43,10 @@ Q=-l ./render.sh                 # 빠른 미리보기 품질 (-l 저화질 / -m
 | `scenes/gradient_descent.py` | `GradientDescent` | L=3x² 경사 하강 | ## Part 4 최적화 |
 | `scenes/training_loop.py` | `TrainingLoop` | 학습 루프 사이클 + SGD 갱신 | ### 학습 루프 |
 | `scenes/sentiment_overview.py` | `SentimentOverview` | 감정분석 전체 흐름(임베딩 평균) | Part 2 실전예제 ① |
-| `scenes/wordwindow_overview.py` | `WordWindowOverview` | 슬라이딩 윈도우 분류 전체 흐름 | Part 3 실전예제 ② |
+| `scenes/mean_pooling.py` | `MeanPooling` | 평균 풀링 = 화살표들의 무게중심 | 임베딩 평균 풀링 |
+| `scenes/embedding_lookup.py` | `EmbeddingLookup` | nn.Embedding = 룩업 테이블(word→index→행) | 단어를 임베딩으로 변환 |
+| `scenes/wordwindow_overview.py` | `WordWindowOverview` | 슬라이딩 윈도우 = 문맥으로 jordan 구분 | Part 3 실전예제 ② |
+| `scenes/embedding_training.py` | `EmbeddingTraining` | 문맥이 임베딩을 두 쪽으로 학습시킴 | WW PCA 보너스 |
 
 씬 추가: `scenes/`에 `.py` 작성 → `render.sh`의 `SCENES` 배열에 한 줄 추가.
 

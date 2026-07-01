@@ -1,0 +1,65 @@
+<svg width="100%" viewBox="0 0 1200 300" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Word Window Classifier architecture, horizontal left-to-right</title>
+<desc>Left to right flow: padded sentence input, Window unfold, Embedding, Flatten, Linear plus Tanh and Linear drawn as trapezoids narrowing rightward for dimensionality reduction, Sigmoid, then a LOCATION probability per word.</desc>
+<defs>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a1a1a"/></marker>
+</defs>
+
+<text x="620" y="34" text-anchor="middle" font-size="12" fill="#5F5E5A">모든 단어에 대해 동시에 (batched)</text>
+
+<rect x="40" y="58" width="140" height="64" rx="10" fill="#F1EFE8" stroke="#1a1a1a" stroke-width="2"/>
+<text x="110" y="86" text-anchor="middle" font-size="15" font-weight="500" fill="#2C2C2A">Window</text>
+<text x="110" y="105" text-anchor="middle" font-size="12" fill="#5F5E5A">unfold ±N</text>
+
+<line x1="180" y1="90" x2="214" y2="90" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<rect x="214" y="58" width="140" height="64" rx="10" fill="#FBEAF0" stroke="#1a1a1a" stroke-width="2"/>
+<text x="284" y="86" text-anchor="middle" font-size="15" font-weight="500" fill="#4B1528">Embedding</text>
+<text x="284" y="105" text-anchor="middle" font-size="12" fill="#72243E">인덱스 → 벡터 D</text>
+
+<line x1="354" y1="90" x2="388" y2="90" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<rect x="388" y="58" width="140" height="64" rx="10" fill="#F1EFE8" stroke="#1a1a1a" stroke-width="2"/>
+<text x="458" y="86" text-anchor="middle" font-size="15" font-weight="500" fill="#2C2C2A">Flatten</text>
+<text x="458" y="105" text-anchor="middle" font-size="12" fill="#5F5E5A">(2N+1)·D</text>
+
+<line x1="528" y1="90" x2="562" y2="90" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<polygon points="562,58 562,122 702,108 702,72" fill="#E6F1FB" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+<text x="628" y="86" text-anchor="middle" font-size="14" font-weight="500" fill="#042C53">Linear + Tanh</text>
+<text x="628" y="104" text-anchor="middle" font-size="12" fill="#185FA5">→ hidden_dim</text>
+
+<line x1="702" y1="90" x2="736" y2="90" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<polygon points="736,58 736,122 876,104 876,76" fill="#EEEDFE" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+<text x="800" y="86" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C">Linear</text>
+<text x="800" y="104" text-anchor="middle" font-size="12" fill="#534AB7">hidden → 1</text>
+
+<line x1="876" y1="90" x2="910" y2="90" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+
+<rect x="910" y="58" width="140" height="64" rx="10" fill="#EAF3DE" stroke="#1a1a1a" stroke-width="2"/>
+<text x="980" y="86" text-anchor="middle" font-size="15" font-weight="500" fill="#173404">Sigmoid</text>
+<text x="980" y="105" text-anchor="middle" font-size="12" fill="#3B6D11">→ 확률</text>
+
+<line x1="1050" y1="90" x2="1104" y2="90" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr)"/>
+<text x="1112" y="84" text-anchor="start" font-size="14" font-weight="500" fill="#173404">LOCATION</text>
+<text x="1112" y="102" text-anchor="start" font-size="14" font-weight="500" fill="#173404">probability</text>
+
+<path d="M110 122 L110 160 L368 160 L368 204" fill="none" stroke="#888780" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="150" y="152" text-anchor="start" font-size="11" fill="#5F5E5A">단어마다 이 윈도우를 뽑음</text>
+
+<g font-size="12" text-anchor="middle">
+<rect x="40" y="210" width="104" height="34" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/><text x="92" y="232" fill="#888780">&lt;pad&gt;</text>
+<rect x="150" y="210" width="104" height="34" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/><text x="202" y="232" fill="#888780">&lt;pad&gt;</text>
+<rect x="260" y="210" width="104" height="34" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/><text x="312" y="232" fill="#042C53">we</text>
+<rect x="370" y="210" width="104" height="34" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/><text x="422" y="232" fill="#042C53">traveled</text>
+<rect x="480" y="210" width="104" height="34" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/><text x="532" y="232" fill="#042C53">to</text>
+<rect x="590" y="210" width="104" height="34" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="2"/><text x="642" y="232" font-weight="500" fill="#633806">jordan</text>
+<rect x="700" y="210" width="104" height="34" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/><text x="752" y="232" fill="#042C53">last</text>
+<rect x="810" y="210" width="104" height="34" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/><text x="862" y="232" fill="#042C53">summer</text>
+<rect x="920" y="210" width="104" height="34" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/><text x="972" y="232" fill="#888780">&lt;pad&gt;</text>
+<rect x="1030" y="210" width="104" height="34" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/><text x="1082" y="232" fill="#888780">&lt;pad&gt;</text>
+</g>
+<rect x="366" y="206" width="552" height="42" rx="8" fill="none" stroke="#BA7517" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="40" y="272" text-anchor="start" font-size="12" fill="#854F0B">Inputs — 패딩된 문장. 윈도우(2N+1)가 모든 단어 위로 슬라이딩</text>
+</svg>

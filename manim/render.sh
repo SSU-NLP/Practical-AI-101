@@ -8,7 +8,9 @@
 # Outputs: manim/videos/<Scene>.mp4 and manim/videos/<Scene>.gif
 set -euo pipefail
 cd "$(dirname "$0")"
-source ../.venv/bin/activate
+# venv layout differs per OS: bin/ on macOS+Linux, Scripts/ on Windows (Git Bash)
+if [ -f ../.venv/bin/activate ]; then source ../.venv/bin/activate
+else source ../.venv/Scripts/activate; fi
 
 Q="${Q:--m}"                 # default medium (720p30): good size/quality for notebook gifs
 GIF_FPS="${GIF_FPS:-12}"
@@ -30,6 +32,11 @@ SCENES=(
   "scenes/embedding_lookup.py:EmbeddingLookup"
   "scenes/wordwindow_overview.py:WordWindowOverview"
   "scenes/embedding_training.py:EmbeddingTraining"
+  # --- week 2 (LLM API / agent) ---
+  "scenes/api_round_trip.py:ApiRoundTrip"
+  "scenes/messages_context.py:MessagesContext"
+  "scenes/function_calling.py:FunctionCalling"
+  "scenes/agent_loop.py:AgentLoop"
 )
 
 to_gif() {  # mp4 -> gif via two-pass palette (crisp text, small size)
@@ -53,4 +60,5 @@ ls -1 videos/*.mp4 videos/*.gif 2>/dev/null || true
 
 # Project rule: always regenerate BOTH notebook versions (deliverable + local preview).
 echo "=== embedding into notebooks ==="
-python embed_into_notebook.py
+python embed_into_notebook.py   # week 1
+python embed_week2.py           # week 2 (edits the single notebook in place)

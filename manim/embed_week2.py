@@ -16,8 +16,11 @@ NOTEBOOK = os.path.join(WEEK2, "2주차_LLM_API_Agent_실습.ipynb")
 ASSETS = os.path.join(WEEK2, "assets")
 VIDEOS = os.path.join(os.path.dirname(__file__), "videos")
 
+# Points at the working branch so the gifs load on Colab before the merge.
+# After merging to main, change BRANCH to "main" and re-run this script.
+BRANCH = "week2-responses-api-agent"
 GIF_BASE_URL = ("https://raw.githubusercontent.com/SSU-NLP/Practical-AI-101"
-                "/refs/heads/main/week2/assets")
+                f"/refs/heads/{BRANCH}/week2/assets")
 
 TAG = "<!-- manim-visual -->"   # marks our cells so re-runs replace instead of duplicate
 

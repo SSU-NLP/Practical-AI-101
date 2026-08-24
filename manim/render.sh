@@ -37,6 +37,8 @@ SCENES=(
   "scenes/messages_context.py:MessagesContext"
   "scenes/function_calling.py:FunctionCalling"
   "scenes/agent_loop.py:AgentLoop"
+  # --- week 3 (RAG) --- gif는 week3/assets/ 에 수동 복사 (embed 스크립트 없음)
+  "scenes/sentence_embedding.py:SentenceEmbedding"
 )
 
 to_gif() {  # mp4 -> gif via two-pass palette (crisp text, small size)

@@ -12,7 +12,7 @@ to that branch/path for the images to load.
 import json, os, shutil
 
 WEEK2 = os.path.join(os.path.dirname(__file__), "..", "week2")
-NOTEBOOK = os.path.join(WEEK2, "2주차_LLM_API_Agent_실습.ipynb")
+NOTEBOOK = os.path.join(WEEK2, "2차_LLM_API_Agent_실습.ipynb")
 ASSETS = os.path.join(WEEK2, "assets")
 VIDEOS = os.path.join(os.path.dirname(__file__), "videos")
 
@@ -31,10 +31,10 @@ INSERTS = [
     ("## 6. 대화 이어가기", "대화 맥락은 매번 다시 보낸다", "MessagesContext",
      "턴이 늘어날 때마다 `messages` 리스트 전체를 다시 전송합니다. "
      "모델의 답변(assistant)까지 쌓아야 맥락이 이어지고, 그만큼 prompt 토큰과 비용도 함께 늘어납니다."),
-    ("## 7. 함수 호출(Function Calling) 기초", "함수 호출 5단계", "FunctionCalling",
+    ("## 7. 함수 호출(Function Calling)", "함수 호출 5단계", "FunctionCalling",
      "질문 → 모델의 호출 요청(`tool_calls`) → 우리 코드가 실제 실행 → `role:\"tool\"` 로 결과 전달 → 최종 답변. "
      "모델은 어떤 함수를 어떤 인자로 부를지 정할 뿐, 실행은 언제나 우리 코드가 합니다."),
-    ("## 9. 에이전트(Agent) 루프 만들기", "에이전트 루프", "AgentLoop",
+    ("## 9. 에이전트(Agent)", "에이전트 루프", "AgentLoop",
      "도구 호출 요청이 없어질 때까지 같은 왕복을 반복합니다. "
      "모델이 스스로 도구를 골라 쓰다가 더 부를 도구가 없으면 최종 답변을 내고 루프가 끝납니다."),
 ]

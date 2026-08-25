@@ -39,6 +39,8 @@ SCENES=(
   "scenes/agent_loop.py:AgentLoop"
   # --- week 3 (RAG) --- gif는 week3/assets/ 에 수동 복사 (embed 스크립트 없음)
   "scenes/sentence_embedding.py:SentenceEmbedding"
+  "scenes/chunking.py:Chunking"
+  "scenes/vector_db.py:VectorDB"
 )
 
 to_gif() {  # mp4 -> gif via two-pass palette (crisp text, small size)

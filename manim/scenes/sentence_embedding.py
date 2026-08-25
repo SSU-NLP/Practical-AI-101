@@ -4,7 +4,7 @@ Attaches to week3 notebook: '## 4. 임베딩: 문장을 좌표로 바꾸기'.
 """
 from manimlib import *
 
-SENTS = ["The cat sat on the mat.", "A dog chased the cat.", "The sun is bright."]
+SENTS = ["The movie was fantastic.", "The film was great.", "The sun is bright."]
 VECS = ["[ 0.12,  0.75, -0.33, ... ]",
         "[ 0.14,  0.71, -0.29, ... ]",
         "[-0.65,  0.08,  0.52, ... ]"]
